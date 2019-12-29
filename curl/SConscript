@@ -11,20 +11,26 @@ Import('rtconfig')
 #---------------------------------------------------------------------------------
 # Package configuration
 #---------------------------------------------------------------------------------
-PKGNAME = "libssh2"
-DEPENDS = [""]
+PKGNAME = "curl"
+DEPENDS = ["PKG_USING_LIBCURL2RTT"]
 
 #---------------------------------------------------------------------------------
 # Compile the configuration 
 #---------------------------------------------------------------------------------
-SOURCES          = Glob("src/*.c")
+SOURCES          = Glob("curl*/lib/*.c")       + \
+                   Glob("curl*/lib/vauth/*.c") + \
+                   Glob("curl*/lib/vquic/*.c") + \
+                   Glob("curl*/lib/vssh/*.c")  + \
+                   Glob("curl*/lib/vtls/*.c")  + \
+                   Glob("curl*/src/*.c")
 
 LOCAL_CPPPATH    = [] 
 LOCAL_CCFLAGS    = "" 
 LOCAL_ASFLAGS    = ""
 
-CPPPATH          = [os.path.join(GetCurrentDir(), 'src'), 
-                    os.path.join(GetCurrentDir(), 'include')] 
+CPPPATH          = [os.path.join(GetCurrentDir(), '.'),
+                    os.path.join(GetCurrentDir(), 'curl_v7.67.0/lib'), 
+                    os.path.join(GetCurrentDir(), 'curl_v7.67.0/include')] 
 
 CCFLAGS          = "" 
 ASFLAGS          = ""

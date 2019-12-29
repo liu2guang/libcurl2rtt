@@ -336,6 +336,6 @@ static int curl(int argc, char *argv[])
   return (int)result;
 #endif
 }
-MSH_CMD_EXPORT(curl, curl.);
+MSH_CMD_EXPORT(curl, The curl command line ported on the RT-Thread platform.);
 
 #endif /* ndef UNITTESTS */
