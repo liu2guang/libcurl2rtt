@@ -4,94 +4,17 @@
 # @Author: Copyright (c) 2018-2019, liu2guang 1004383796@qq.com
 #---------------------------------------------------------------------------------
 import os
-from building import * 
-Import('RTT_ROOT')
-Import('rtconfig')
+from building import *
 
-#---------------------------------------------------------------------------------
-# Package configuration
-#---------------------------------------------------------------------------------
-PKGNAME = "curl"
-DEPENDS = [""]
+objs = []
+cwd  = GetCurrentDir()
+list = os.listdir(cwd)
 
-#---------------------------------------------------------------------------------
-# Compile the configuration 
-#---------------------------------------------------------------------------------
-SOURCES          = Glob("curl*/lib/*.c")       + \
-                   Glob("curl*/lib/vauth/*.c") + \
-                   Glob("curl*/lib/vquic/*.c") + \
-                   Glob("curl*/lib/vssh/*.c")  + \
-                   Glob("curl*/lib/vtls/*.c")  + \
-                   Glob("curl*/src/*.c")
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        objs = objs + SConscript(os.path.join(item, 'SConscript'))
 
-LOCAL_CPPPATH    = [] 
-LOCAL_CCFLAGS    = "" 
-LOCAL_ASFLAGS    = ""
-
-CPPPATH          = [os.path.join(GetCurrentDir(), '.'),
-                    os.path.join(GetCurrentDir(), 'curl_v7.67.0/lib'), 
-                    os.path.join(GetCurrentDir(), 'curl_v7.67.0/include')] 
-
-CCFLAGS          = "" 
-ASFLAGS          = ""
-
-CPPDEFINES       = ["HAVE_CONFIG_H", "BUILDING_LIBCURL"]
-LOCAL_CPPDEFINES = []
-
-LIBS             = [] 
-LIBPATH          = [GetCurrentDir()] 
-
-LINKFLAGS        = "" 
-
-#---------------------------------------------------------------------------------
-# Feature clip configuration, optional 
-#---------------------------------------------------------------------------------
-
-#---------------------------------------------------------------------------------
-# Compiler platform configuration, optional
-#---------------------------------------------------------------------------------
-if rtconfig.CROSS_TOOL == "gcc":
-    LOCAL_CCFLAGS += ' -std=gnu99 -Ofast -w' 
-
-if rtconfig.CROSS_TOOL == "iar":
-    print("Warning: No iar platform was tested!!!")
-
-if rtconfig.CROSS_TOOL == "keil":
-    LOCAL_CCFLAGS += ' --gnu -W --diag_suppress=870'
-
-#---------------------------------------------------------------------------------
-# System variables
-#---------------------------------------------------------------------------------
-objs   = [] 
-root   = GetCurrentDir() 
-
-#---------------------------------------------------------------------------------
-# Sub target
-#---------------------------------------------------------------------------------
-list = os.listdir(root)
-if GetDepend(DEPENDS):
-    for d in list:
-        path = os.path.join(root, d)
-        if os.path.isfile(os.path.join(path, 'SConscript')):
-            objs = objs + SConscript(os.path.join(d, 'SConscript')) 
-
-#---------------------------------------------------------------------------------
-# Main target
-#---------------------------------------------------------------------------------
-objs += DefineGroup(name = PKGNAME, src = SOURCES, depend = DEPENDS, 
-                   CPPPATH          = CPPPATH, 
-                   CCFLAGS          = CCFLAGS, 
-                   ASFLAGS          = ASFLAGS, 
-                   LOCAL_CPPPATH    = LOCAL_CPPPATH, 
-                   LOCAL_CCFLAGS    = LOCAL_CCFLAGS, 
-                   LOCAL_ASFLAGS    = LOCAL_ASFLAGS, 
-                   CPPDEFINES       = CPPDEFINES, 
-                   LOCAL_CPPDEFINES = LOCAL_CPPDEFINES, 
-                   LIBS             = LIBS, 
-                   LIBPATH          = LIBPATH,
-                   LINKFLAGS        = LINKFLAGS) 
-                   
-Return("objs") 
+Return('objs')
 #---------------------------------------------------------------------------------
 # End
 #---------------------------------------------------------------------------------
