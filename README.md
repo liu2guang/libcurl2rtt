@@ -1,6 +1,8 @@
 # libcurl2rtt
 The curl library ported on the RT-Thread platform. | 基于 RT-Thread 移植的 curl 库. 
 
+注意测试的命令行的时候，需要讲shell线程的栈空间改大，否则系统线程会写穿，导致进入HF
+
 ```
 msh /etc/certs>curl --verbose --capath ./ https://www.rt-thread.com/service/rt-thread.txt
 * timeout on name lookup is not supported
